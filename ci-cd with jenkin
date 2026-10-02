@@ -1,0 +1,165 @@
+Practical 7 — Jenkins CI/CD
+Your uploaded Practical 7 PDF is the Jenkins CI/CD practical. The goal is:
+Flask → GitHub → Jenkins → Build → Test → Deploy     prac 7
+Part A — Check Java & Git
+Open CMD:
+1. Check Java
+java -version
+
+You should get Java 17 or later.
+2. Check Git
+git --version
+
+You should get something like:
+git version 2.x.x
+
+    prac 7
+Part B — Open Jenkins
+Open browser:
+http://localhost:8080
+
+You should see the Jenkins dashboard.
+If Jenkins asks for the initial password, the PDF says it is normally at:
+C:\ProgramData\Jenkins\.jenkins\secrets\initialAdminPassword
+
+Then select:
+Install suggested plugins
+and create the Jenkins admin account.     prac 7
+Part C — Create Flask Project
+Create folder:
+flask-jenkins-demo
+
+Inside it create 3 files:
+flask-jenkins-demo
+│
+├── app.py
+├── requirements.txt
+└── test_app.py
+
+app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Flask CI/CD!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+requirements.txt
+Flask
+pytest
+
+test_app.py
+from app import appdef test_home():    client = app.test_client()    response = client.get("/")    assert response.status_code == 200    assert response.data == b"Hello from Flask CI/CD!"
+
+
+    prac 7
+Part D — Test Flask
+Open terminal inside the project.
+1. Create virtual environment
+python -m venv venv
+
+2. Activate
+venv\Scripts\activate
+
+3. Install
+pip install -r requirements.txt
+
+4. Run test ⭐
+pytest
+
+Expected:
+1 passed
+
+5. Run Flask
+python app.py
+
+Open:
+http://localhost:5000
+
+Expected:
+Hello from Flask CI/CD!
+
+    prac 7
+Part E — Upload to GitHub
+Create a GitHub repository, for example:
+flask-jenkins-demo
+
+Then in terminal:
+git init
+git add .
+git commit -m "Initial Flask application"
+git branch -M main
+git remote add origin YOUR_GITHUB_REPOSITORY_URL
+git push -u origin main
+
+    prac 7
+Part F — Create Jenkins Pipeline ⭐
+Go to:
+Jenkins Dashboard → New Item
+Enter:
+Flask-CI-CD
+
+Select:
+Pipeline
+Click OK.
+Scroll to Pipeline → select Pipeline script.
+Paste:
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'YOUR_GITHUB_REPOSITORY_URL'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'python -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'pytest'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                bat 'echo Application deployed successfully'
+            }
+        }
+    }
+}
+Replace:
+YOUR_GITHUB_REPOSITORY_URL
+
+with your actual GitHub repository URL.
+Then click Save.     prac 7
+Part G — Run Pipeline 🔥
+Go to:
+Jenkins → Flask-CI-CD → Build Now
+Then:
+Build #1 → Console Output
+You want to show:
+Checkout
+Install Dependencies
+Test
+
+1 passed
+
+Deploy
+
+Application deployed successfully
+
+Finally:
+Finished: SUCCESS
+
+🎯 This is the main output to show the examiner.     prac 7
