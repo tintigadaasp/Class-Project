@@ -1,0 +1,145 @@
+5A — Dockerize Flask Application
+1. Open CMD / PowerShell
+Check Docker:
+docker --version
+
+Also:
+docker info
+
+Docker Desktop should be Running.
+2. Create project
+mkdir Flask_Project
+cd Flask_Project
+code .
+
+3. Create app.py
+from flask import Flaskapp = Flask(__name__)@app.route("/")def home():    return "Welcome to Dockerized Flask Application"@app.route("/about")def about():    return "Docker Practical"if __name__ == "__main__":    app.run(host="0.0.0.0", port=5000)
+
+
+4. Install Flask
+pip install flask
+
+Test:
+python app.py
+
+Open:
+http://localhost:5000
+
+Output:
+Welcome to Dockerized Flask Application
+
+5. Create requirements.txt
+Easiest:
+pip freeze > requirements.txt
+
+6. Create Dockerfile
+Important: filename is exactly Dockerfile, no .txt.
+Paste:
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python","app.py"]
+
+7. Build Docker image
+docker build -t flask-app .
+
+Expected:
+Successfully tagged flask-app:latest
+
+8. Check image
+docker images
+
+You should see:
+flask-app    latest
+
+✅ 5A complete.     practical 5a
+🟩 5B — Run Docker Container
+1. Check image
+docker images
+
+2. Run container
+docker run -d -p 5000:5000 flask-app
+
+3. Check container
+docker ps
+
+You should see:
+flask-app
+Up
+0.0.0.0:5000->5000/tcp
+
+4. Open browser
+http://localhost:5000
+
+Output:
+Welcome to Dockerized Flask Application
+
+Test /about:
+http://localhost:5000/about
+
+Output:
+Docker Practical
+
+5. Check logs if needed
+docker logs <container_id>
+
+6. Stop container
+docker stop <container_id>
+
+7. Start again
+docker ps -a
+docker start <container_id>
+
+Then open:
+http://localhost:5000
+
+✅ 5B complete.     practical 5b
+🟧 5C — Push Image to Docker Hub
+1. Check image
+docker images
+
+You should have:
+flask-app    latest
+
+2. Login
+docker login
+
+Enter your:
+- Docker Hub username
+- Password / Personal Access Token
+Expected:
+Login Succeeded
+
+3. Tag image
+Replace YOUR_USERNAME with your Docker Hub username:
+docker tag flask-app YOUR_USERNAME/flask-app:latest
+
+Example:
+docker tag flask-app aaru123/flask-app:latest
+
+4. Check tag
+docker images
+
+You should see:
+flask-app
+YOUR_USERNAME/flask-app
+
+5. Push to Docker Hub
+docker push YOUR_USERNAME/flask-app:latest
+
+Wait until upload finishes.
+6. Verify
+Go to Docker Hub → Repositories
+You should see:
+flask-app
+
+✅ 5C complete.
