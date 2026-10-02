@@ -1,0 +1,173 @@
+Practical 3A — Git Repository
+1. Open VS Code → Terminal
+cd Desktop
+mkdir Git_Practical
+cd Git_Practical
+code .
+cd Desktop
+mkdir Git_Practical
+cd Git_Practical
+code .
+print("Hello Git!")
+3. Create README.md
+# Git Practical
+This is my first Git repository.
+
+4. Initialize Git
+git init
+
+5. Check status
+git status
+
+6. Add files
+git add .
+
+7. Commit
+git commit -m "Initial Python Project"
+
+8. Check status
+git status
+
+Expected:
+nothing to commit, working tree clean
+
+9. Check history
+git log
+
+
+✅ 3A complete.
+Practical 3B — Branching + Pull Request
+Start from your Git_Practical folder.
+1. Check branch
+git branch
+
+If it shows master, change to main:
+git branch -M main
+
+2. Create feature branch
+git checkout -b feature-login
+
+3. Check branch
+git branch
+
+You should see:
+* feature-login
+  main
+
+4. Change hello.py
+Make it:
+print("Hello Git!")print("Welcome to Git Repository")print("Login Feature Added")print("Feature Branch Example")
+
+
+5. Add and commit
+git add hello.py
+git commit -m "Added login feature"
+
+6. Connect GitHub
+Create a GitHub repository named Git_Practical.
+Then:
+git remote add origin https://github.com/YOUR_USERNAME/Git_Practical.git
+
+Check:
+git remote -v
+
+7. Push main
+git checkout main
+git push -u origin main
+
+8. Push feature branch
+git checkout feature-login
+git push -u origin feature-login
+
+9. Create Pull Request
+On GitHub:
+Compare & Pull Request
+↓
+Title: Added Login Feature
+↓
+Create Pull Request
+↓
+Merge Pull Request
+↓
+Confirm Merge
+10. Update local main
+git checkout main
+git pull origin main
+
+11. Check
+Open hello.py.
+You should have:
+print("Hello Git!")print("Welcome to Git Repository")print("Login Feature Added")print("Feature Branch Example")
+
+
+✅ 3B complete.
+Practical 3C — Merge Conflict
+Now create a conflict between main and a new branch.
+1. Check main
+git checkout main
+
+2. Create conflict branch
+git checkout -b feature-conflict
+
+3. Change hello.py
+print("Hello Git!")print("Feature Branch Version")
+
+
+4. Commit
+git add hello.py
+git commit -m "Modified hello.py in feature branch"
+
+5. Go back to main
+git checkout main
+
+6. Change the same line
+print("Hello Git!")print("Main Branch Version")
+
+
+7. Commit
+git add hello.py
+git commit -m "Modified hello.py in main branch"
+
+8. Merge feature branch
+git merge feature-conflict
+
+You will get:
+CONFLICT (content): Merge conflict in hello.py
+Automatic merge failed
+
+🔥 This is the merge conflict.
+9. Open hello.py
+You will see:
+print("Hello Git!")<<<<<<< HEADprint("Main Branch Version")=======print("Feature Branch Version")>>>>>>> feature-conflict
+
+
+10. Resolve it
+For the practical, keep both:
+print("Hello Git!")print("Main Branch Version")print("Feature Branch Version")
+
+
+❗ Delete:
+<<<<<<< HEAD
+=======
+>>>>>>> feature-conflict
+
+Save the file.
+11. Add resolved file
+git add hello.py
+
+12. Complete merge
+git commit -m "Resolved merge conflict"
+
+13. Check history
+git log --oneline
+
+14. Final check
+git status
+
+Expected:
+nothing to commit, working tree clean
+
+✅ 3C complete.     practical3c
+
+
+
