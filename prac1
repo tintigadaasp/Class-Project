@@ -1,0 +1,17 @@
+1. Open CMD/PowerShell.
+2. Check Docker:
+   docker --version
+
+3. Pull Nginx image:
+   docker pull nginx
+
+4. Run Nginx container:
+   docker run -d -p 8080:80 nginx
+
+5. Check running container:
+   docker ps
+
+6. Open browser:
+   http://localhost:8080
+
+7. Nginx welcome page is displayed.
