@@ -1,0 +1,110 @@
+Practical 4 — VMware + Networking + Flask
+This one has 3 parts: VM → Networking → Flask deployment. Keep it simple for the exam.     Practical 4
+Part A — Create/Manage Ubuntu VM
+1. Open VMware
+1. Open VMware Workstation
+2. Select your Ubuntu VM
+3. Click Power On
+4. Login to Ubuntu.
+2. Update Ubuntu
+Open Terminal:
+sudo apt update
+sudo apt upgrade -y
+
+3. Check Python
+python3 --version
+
+Expected:
+Python 3.x.x
+
+If Python is missing:
+sudo apt install python3 python3-pip -y
+
+4. Install Flask
+pip3 install flask
+
+Check:
+pip3 show flask
+
+✅ Part A complete.
+Part B — Networking
+1. Find VM IP address
+hostname -I
+
+Example:
+192.168.43.128
+
+You can also use:
+ip addr
+
+2. Check VMware network
+VMware:
+VM → Settings → Network Adapter → NAT
+Remember:
+- NAT → VM uses host's internet
+- Bridged → VM gets its own network IP
+- Host-only → Host ↔ VM only
+For exam, NAT is easiest.     Practical 4
+3. Check internet
+ping google.com
+
+If replies come → network is working.
+4. Check ports
+sudo ss -tuln
+
+Flask commonly uses:
+5000
+
+5. Allow port 5000
+sudo ufw allow 5000
+
+Check:
+sudo ufw status
+
+✅ Part B complete.
+Part C — Deploy Flask Manually
+1. Create folder
+mkdir FlaskApp
+cd FlaskApp
+
+2. Create app.py
+nano app.py
+
+Paste:
+from flask import Flaskapp = Flask(__name__)@app.route('/')def home():    return "Hello from Ubuntu Virtual Machine!"if __name__ == "__main__":    app.run(host="0.0.0.0", port=5000)
+
+
+Save the file.
+3. Run Flask
+python3 app.py
+
+Expected:
+Running on http://0.0.0.0:5000
+
+4. Test in Ubuntu browser
+Open:
+http://localhost:5000
+
+Output:
+Hello from Ubuntu Virtual Machine!
+
+5. If accessing from host PC
+Use:
+http://VM_IP:5000
+
+6. Stop Flask
+Press:
+Ctrl + C
+
+✅ Practical 4 complete.     Practical 4
+    sudo apt update
+sudo apt upgrade -y
+python3 --version
+pip3 install flask
+hostname -I
+ping google.com
+sudo ss -tuln
+sudo ufw allow 5000
+mkdir FlaskApp
+cd FlaskApp
+python3 app.py
