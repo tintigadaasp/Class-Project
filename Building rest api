@@ -1,3 +1,13 @@
+Step 1 — Open your project
+Open VS Code → create folder:
+Flask_Project
+
+Create:
+app.py
+
+Step 2 — Put this code in app.py
+This is the CRUD code from your practical, kept as simple as possible:
+
 Create app.py
 Paste this:
 from flask import Flask, jsonify, request
@@ -69,23 +79,51 @@ python app.py
 You should see:
 Running on http://127.0.0.1:5000
 
-CRUD Commands
-1. READ — Get all
-curl http://127.0.0.1:5000/todos
+You will get:
+[
+    {
+        "id": 1,
+        "title": "Learn Flask",
+        "completed": false
+    }
+]
+This demonstrates READ.
+The practical's GET endpoint is:
+GET /todos
 
-2. CREATE — Add task
-curl -X POST http://127.0.0.1:5000/todos -H "Content-Type: application/json" -d "{\"title\":\"Complete REST API Assignment\"}"\
+Step 6 — POST / CREATE
+Open another terminal and run:
+curl -X POST http://127.0.0.1:5000/todos -H "Content-Type: application/json" -d "{\"title\":\"Complete REST API Assignment\"}"
+Output:
+{
+    "id": 2,
+    "title": "Complete REST API Assignment",
+    "completed": false
+}
+This demonstrates CREATE.     Practical 2
 
-3. READ — Get one
-curl http://127.0.0.1:5000/todos/2
-
-4. UPDATE — Change task
+Step 7 — PUT / UPDATE
+Run:
 curl -X PUT http://127.0.0.1:5000/todos/1 -H "Content-Type: application/json" -d "{\"title\":\"Learn Flask API\",\"completed\":true}"
 
-5. DELETE — Delete task
+Output:
+{
+    "id": 1,
+    "title": "Learn Flask API",
+    "completed": true
+}
+
+This demonstrates UPDATE.
+
+Step 8 — DELETE
+Run:
 curl -X DELETE http://127.0.0.1:5000/todos/1
 
+Output:
+{
+    "message": "Task deleted successfully"
+}
 
-
+This demonstrates DELETE.     Practical 2
 
 
