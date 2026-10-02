@@ -1,0 +1,126 @@
+Practical 6 — Docker Compose + Flask + PostgreSQL
+Aim: Run Flask and PostgreSQL together using Docker Compose and show that Flask connects to PostgreSQL.     PRACTICAL 6
+Step 1 — Create folder
+Open CMD / PowerShell:
+mkdir FlaskComposeProject
+cd FlaskComposeProject
+code .
+
+Your folder should contain:
+FlaskComposeProject
+│
+├── app.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+└── .env
+
+Step 2 — Create app.py
+Paste:
+from flask import Flask
+import psycopg2
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        conn.close()
+        return "Connected Successfully to PostgreSQL!"
+    except Exception as e:
+        return "Database Connection Failed: " + str(e)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+Step 3 — requirements.txt
+Flask
+psycopg2-binary
+
+Step 4 — Dockerfile
+Create a file exactly named Dockerfile:
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+Step 5 — .env
+DB_HOST=db
+DB_NAME=mydatabase
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+Important: DB_HOST=db because the PostgreSQL service is named db.     PRACTICAL 6
+Step 6 — docker-compose.yml
+Paste:
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: mydatabase
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+Step 7 — Build
+In terminal:
+docker compose build
+
+Wait until it finishes successfully.
+Step 8 — Start containers
+docker compose up -d
+
+Expected:
+Creating network "flaskcomposeproject_default"
+Creating volume "postgres_data"
+Creating postgres_db
+Creating flask_app
+
+    PRACTICAL 6
+Step 9 — Check containers
+docker ps
+
+You should see 2 containers:
+flask_app       Up
+postgres_db     Up
+
+    PRACTICAL 6
+Step 10 — Show final output ⭐
+Open browser:
+http://localhost:5000
+Expected:
+Connected Successfully to PostgreSQL!
+
+This proves:
+Flask → PostgreSQL connection is working.
