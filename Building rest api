@@ -5,6 +5,14 @@ Flask_Project
 Create:
 app.py
 
+create a virtual environment 
+
+python-m venv venv
+
+activate it : 
+
+venv/Scripts/activate
+
 Step 2 — Put this code in app.py
 This is the CRUD code from your practical, kept as simple as possible:
 
